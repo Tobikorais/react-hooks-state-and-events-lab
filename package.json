@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+
     "mocha": "^8.2.1"
   },
   "scripts": {
@@ -39,3 +40,45 @@
     ]
   }
 }
+
+// src/__tests__/App.test.js
+import { render, fireEvent, screen } from "@testing-library/react";
+import App from "../components/App";
+
+test("changes to 'dark' mode when the button is clicked", () => {
+  render(<App />);
+
+  // Click the "Mode" button
+  fireEvent.click(screen.getByText(/Switch to Dark Mode/));
+
+  // Check if the "dark" class is applied
+  const appDiv = screen.getByRole("button").closest(".App");
+  expect(appDiv).toHaveClass("dark");
+});
+
+test("changes back to 'light' mode when the button is clicked twice", () => {
+  render(<App />);
+
+  // Click the "Mode" button twice
+  fireEvent.click(screen.getByText(/Switch to Dark Mode/));
+  fireEvent.click(screen.getByText(/Switch to Light Mode/));
+
+  // Check if the "dark" class is removed
+  const appDiv = screen.getByRole("button").closest(".App");
+  expect(appDiv).not.toHaveClass("dark");
+});
+
+// src/__tests__/Item.test.js
+import { render, fireEvent, screen } from "@testing-library/react";
+import Item from "../components/Item";
+
+test("the <li> has a className of 'in-cart' when the Add to Cart button is clicked", () => {
+  render(<Item name="Milk" category="Dairy" />);
+
+  // Click the "Add to Cart" button
+  fireEvent.click(screen.getByText(/Add to Cart/));
+
+  // Check if the <li> has the "in-cart" class
+  const listItem = screen.getByText("Milk").closest("li");
+  expect(listItem).toHaveClass("in-cart");
+});
